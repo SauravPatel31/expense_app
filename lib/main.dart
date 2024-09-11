@@ -1,4 +1,5 @@
 import 'package:expense_app/ui_pages/bottomnav_page.dart';
+import 'package:expense_app/ui_pages/login_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Expense App',
-      home: BottomNavPage(),
+      home: LoginPage(),
     );
   }
 }

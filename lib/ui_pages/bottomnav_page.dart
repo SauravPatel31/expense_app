@@ -10,7 +10,7 @@ class BottomNavPage extends StatefulWidget{
 }
 
 class BottomNavPageState extends State<StatefulWidget>{
-  int selectedindex=1;
+  int selectedindex=0;
   List<Widget> navTo=[
     HomePage(),
     StatiSticPage(),

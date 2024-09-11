@@ -40,7 +40,7 @@ class HomePageState extends State<StatefulWidget>{
                       backgroundImage: AssetImage("assets/images/p7.jpeg"),
                       backgroundColor: Colors.cyan,
                     ),
-                    ///User name day status is like morning afternon evening..
+                    ///User name day status is like morning  evening..
                     Expanded(
                       child: Container(
                         margin: EdgeInsets.only(left: 10),
@@ -71,7 +71,7 @@ class HomePageState extends State<StatefulWidget>{
               ///Poster(Card)..
               Container(
                 width:double.infinity,
-                height: 190,
+                 height: 190,
                 decoration: BoxDecoration(
                   color: posterColor(),
                   borderRadius: BorderRadius.circular(20),
@@ -89,11 +89,12 @@ class HomePageState extends State<StatefulWidget>{
                             Text("Expenses total",style: myFonts18(myColor: Colors.white),),
                             ///Expenses total Amount..
                             Text("\$3,734",style: TextStyle(
-                                fontSize: 45,
+                                fontSize: 35,
                                 fontWeight: FontWeight.bold,
                                 color: whiteColor(),
 
                             ),),
+                            Text("than last month",style:  myFonts11(myColor: Colors.white),)
                           ],
                         ),
                       ),
