@@ -18,6 +18,7 @@ class BottomNavPageState extends State<StatefulWidget>{
     AddExpPage(),
     Center(child: Text("Notification")),
     Center(child: Text("Reward")),
+
   ];
   @override
   Widget build(BuildContext context) {
