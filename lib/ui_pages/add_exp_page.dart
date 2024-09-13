@@ -1,8 +1,16 @@
+import 'package:expense_app/data/local_data/dbhelper.dart';
+import 'package:expense_app/data/models/category_model.dart';
+import 'package:expense_app/data/models/expense_model.dart';
+import 'package:expense_app/ui_pages/bloc/expense_bloc.dart';
+import 'package:expense_app/ui_pages/bloc/expense_event.dart';
+import 'package:expense_app/ui_pages/login_page.dart';
 import 'package:expense_app/utils/app_const_data.dart';
 import 'package:expense_app/utils/app_styling.dart';
 import 'package:expense_app/utils/custome_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddExpPage extends StatefulWidget {
   @override
@@ -20,11 +28,11 @@ class _AddExpPageState extends State<AddExpPage> {
   DateTime? datePicked;
   DateFormat mFormat = DateFormat.yMMMd();
 
-  List<String> mType=['Debit','Credit'];
-  String selectedType="Debit";
-
+  List<String> mType = ['Debit', 'Credit'];
+  String selectedType = "Debit";
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Add Your Expense"),
@@ -37,126 +45,191 @@ class _AddExpPageState extends State<AddExpPage> {
                 controller: titleController, hinttxt: "Enter your Title"),
             mySizebox(),
             myTextFields(
-                controller: descController, hinttxt: "Enter your Description",),
+              controller: descController,
+              hinttxt: "Enter your Description",
+            ),
             mySizebox(),
             myTextFields(
-                controller: amountController, hinttxt: "Enter your Amount",keyBoardType: TextInputType.number,),
+              controller: amountController,
+              hinttxt: "Enter your Amount",
+              keyBoardType: TextInputType.number,
+            ),
             mySizebox(),
+
             ///select Category..
             OutlinedButton(
                 style: OutlinedButton.styleFrom(
-                  minimumSize: Size(double.infinity, 55),
-                  maximumSize: Size(double.infinity, 55),
+                    minimumSize: Size(double.infinity, 55),
+                    maximumSize: Size(double.infinity, 55),
                     side: BorderSide(width: 1),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(11))
-                ),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(11))),
                 onPressed: () {
-              showModalBottomSheet(context: context, builder: (context) {
-                return GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3),
-                    itemCount: AppConstData.mCategory.length,
-                    itemBuilder: (_, index) {
-                      return InkWell(
-                        onTap: () {
-                          selecteditems = index;
-                          setState(() {});
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 30),
-                          child: Column(
-                            children: [
-                              Image.network(
-                                AppConstData.mCategory[index].catImgPath,
-                                width: 50, height: 50, fit: BoxFit.cover,),
-                              Text(AppConstData.mCategory[index].catName)
-                            ],
-                          ),
-                        ),
-                      );
-                    }
-                );
-              },);
-            }, child: selecteditems >= 0 ? Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.network(
-                  AppConstData.mCategory[selecteditems].catImgPath, width: 35,
-                  height: 35,),
-                Text(":- ${AppConstData.mCategory[selecteditems].catName}",style: myFonts13(myFontWeight: FontWeight.w600),)
-              ],) : Text("Select Category..",style: myFonts13(myFontWeight: FontWeight.w600),)),
-            mySizebox(),
-            ///select Date...
-            StatefulBuilder(builder: (context, ss) {
-              return OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  side: BorderSide(color: Colors.black,width: 1),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(11)),
-                  maximumSize: Size(MediaQuery.of(context).size.width, 55),
-                  minimumSize: Size(MediaQuery.of(context).size.width, 55),
-                ),
-                onPressed: () async {
-                  datePicked = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(DateTime.now().year,DateTime.now().month-1),
-                      lastDate: DateTime.now()
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3),
+                          itemCount: AppConstData.mCategory.length,
+                          itemBuilder: (_, index) {
+                            return InkWell(
+                              onTap: () {
+                                selecteditems = index;
+                                setState(() {});
+                              },
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 30),
+                                child: Column(
+                                  children: [
+                                    Image.network(
+                                      AppConstData.mCategory[index].catImgPath,
+                                      width: 50,
+                                      height: 50,
+                                      fit: BoxFit.cover,
+                                    ),
+                                    Text(AppConstData.mCategory[index].catName)
+                                  ],
+                                ),
+                              ),
+                            );
+                          });
+                    },
                   );
-                  ss(() {});
-                }, child:Text("${mFormat.format(datePicked??DateTime.now())}",style: myFonts13(myFontWeight: FontWeight.w700),),
-              );
-            },),
+                },
+                child: selecteditems >= 0
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.network(
+                            AppConstData.mCategory[selecteditems].catImgPath,
+                            width: 35,
+                            height: 35,
+                          ),
+                          Text(
+                            ":- ${AppConstData.mCategory[selecteditems].catName}",
+                            style: myFonts13(myFontWeight: FontWeight.w600),
+                          )
+                        ],
+                      )
+                    : Text(
+                        "Select Category..",
+                        style: myFonts13(myFontWeight: FontWeight.w600),
+                      )),
+            mySizebox(),
+
+            ///select Date...
+            StatefulBuilder(
+              builder: (context, ss) {
+                return OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(color: Colors.black, width: 1),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(11)),
+                    maximumSize: Size(MediaQuery.of(context).size.width, 55),
+                    minimumSize: Size(MediaQuery.of(context).size.width, 55),
+                  ),
+                  onPressed: () async {
+                    datePicked = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(
+                            DateTime.now().year, DateTime.now().month - 1),
+                        lastDate: DateTime.now());
+                    ss(() {});
+                  },
+                  child: Text(
+                    "${mFormat.format(datePicked ?? DateTime.now())}",
+                    style: myFonts13(myFontWeight: FontWeight.w700),
+                  ),
+                );
+              },
+            ),
 
             mySizebox(),
+
             ///Dropdown Menu
-            StatefulBuilder(builder: (_,ss){
-              return  DropdownMenu(
+            StatefulBuilder(builder: (_, ss) {
+              return DropdownMenu(
                   initialSelection: selectedType,
-                  width: MediaQuery.of(context).size.width-30,
+                  width: MediaQuery.of(context).size.width - 30,
                   label: Text("Expense Type"),
                   inputDecorationTheme: InputDecorationTheme(
-                    focusedBorder:OutlineInputBorder(borderRadius: BorderRadius.circular(11),borderSide: BorderSide(width: 1)) ,
-                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(11),borderSide: BorderSide(width: 1)),
-
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(11),
+                        borderSide: BorderSide(width: 1)),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(11),
+                        borderSide: BorderSide(width: 1)),
                   ),
-                  onSelected: (value){
-                    selectedType=value!;
-                    ss(() {
-                      print("ss called!!");
-                    });
+                  onSelected: (value) {
+                    selectedType = value!;
+                    ss(() {});
                     print(selectedType);
                   },
-                  dropdownMenuEntries: mType.map((e){
+                  dropdownMenuEntries: mType.map((e) {
                     return DropdownMenuEntry(value: e, label: e);
-
                   }).toList());
             }),
             mySizebox(mheight: 22),
+
             ///Add Expense Button..
             ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: pinkColor(),
                   minimumSize: Size(MediaQuery.of(context).size.width, 55),
                   maximumSize: Size(MediaQuery.of(context).size.width, 55),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(11)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(11)),
                   elevation: 5,
                   shadowColor: pinkColor(),
-
                 ),
-                onPressed: (){
-                  if(titleController.text.isNotEmpty&&descController.text.isNotEmpty&&amountController.text.isNotEmpty&&selecteditems>-1){
-
+                onPressed: () {
+                  if (titleController.text.isNotEmpty &&
+                      descController.text.isNotEmpty &&
+                      amountController.text.isNotEmpty &&
+                      selecteditems > -1) {
+                    /*context.read<ExpenseBloc>().add(AddExpenseEvent(
+                        addExpense: ExpenseModel(
+                            uid: 0,
+                            etitle: titleController.text,
+                            edesc: descController.text,
+                            etype: selectedType,
+                            eamt: int.parse(amountController.text),
+                            ebal: 0,
+                            cat_id: selecteditems,
+                            crated_at: )));*/
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                        "All field are required",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      backgroundColor: Colors.red,
+                    ));
                   }
-                  else{
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                            content: Text("All field are required",style: TextStyle(color: Colors.white),),
-                          backgroundColor: Colors.red,
+                },
+                child: Text(
+                  "ADD EXPENSE",
+                  style: myFonts16(myColor: whiteColor()),
+                )),
 
-                        ));
-                  }
-                }, child: Text("ADD EXPENSE",style: myFonts16(myColor: whiteColor()),))
-
+            ///Logout Button..
+            ElevatedButton(
+                onPressed: () async {
+                  SharedPreferences pref =
+                      await SharedPreferences.getInstance();
+                  pref.setInt(DBhelper.UID_KEY, 0);
+                  pref.setString("uName", "");
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LoginPage(),
+                      ));
+                },
+                child: Text("Logout"))
           ],
         ),
       ),

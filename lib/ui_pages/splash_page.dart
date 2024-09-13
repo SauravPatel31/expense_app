@@ -18,12 +18,13 @@ class _SplashPageState extends State<SplashPage> {
     super.initState();
     Timer(Duration(seconds: 3), ()async{
       SharedPreferences pref =await SharedPreferences.getInstance();
-      int isCheck = pref.getInt(DBhelper.UID_KEY)??0;
-      Widget navTo = LoginPage();
-      if(isCheck!=null){
-        navTo=BottomNavPage();
-      }
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => navTo,));
+     int isCheck =  pref.getInt(DBhelper.UID_KEY)??0;
+     Widget navTo = LoginPage();
+     if(isCheck!=0){
+       navTo=BottomNavPage();
+     }
+     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => navTo,));
+
     });
   }
   @override
