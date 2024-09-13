@@ -1,5 +1,6 @@
 import 'package:expense_app/utils/app_styling.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget{
   @override
@@ -9,6 +10,20 @@ class HomePage extends StatefulWidget{
 }
 
 class HomePageState extends State<StatefulWidget>{
+  String username="";
+  @override
+  void initState() {
+
+    super.initState();
+    getUserValue();
+  }
+  getUserValue()async{
+    SharedPreferences pref =await SharedPreferences.getInstance();
+    username = pref.getString("uName")??"user name";
+    setState(() {
+
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +65,7 @@ class HomePageState extends State<StatefulWidget>{
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("Morning",style: myFonts11(myColor: Colors.grey,myFontWeight: FontWeight.bold),),
-                            Text("Saurav Kumar",style: myFonts16(myFontWeight: FontWeight.w600),),
+                            Text(username,style: myFonts16(myFontWeight: FontWeight.w600),),
                           ],
                         ),
                       ),

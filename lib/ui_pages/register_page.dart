@@ -1,7 +1,9 @@
 import 'package:expense_app/data/local_data/dbhelper.dart';
-import 'package:expense_app/models/user_model.dart';
 import 'package:expense_app/ui_pages/login_page.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../data/models/user_model.dart';
 
 class RegisterPage extends StatelessWidget{
   TextEditingController emailController =TextEditingController();
@@ -66,6 +68,8 @@ class RegisterPage extends StatelessWidget{
               DBhelper myDB = DBhelper.getInstance();
              bool isAdd = await myDB.addNewUser(UserModel(uid: 0, name: nameController.text, email: emailController.text, mobno: mobController.text, gn: gendarController.text, pass: passController.text));
              if(isAdd){
+               SharedPreferences pref =await SharedPreferences.getInstance();
+               pref.setString("uName", nameController.text.toString());
                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage(),));
              }
              else{

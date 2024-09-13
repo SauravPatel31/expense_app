@@ -1,3 +1,4 @@
+import 'package:expense_app/ui_pages/add_exp_page.dart';
 import 'package:expense_app/ui_pages/home_page.dart';
 import 'package:expense_app/ui_pages/statistic_page.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ class BottomNavPageState extends State<StatefulWidget>{
   List<Widget> navTo=[
     HomePage(),
     StatiSticPage(),
-    Center(child: Text("Add Expenses")),
+    AddExpPage(),
     Center(child: Text("Notification")),
     Center(child: Text("Reward")),
   ];

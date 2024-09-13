@@ -1,11 +1,12 @@
 import 'dart:io';
 
-import 'package:expense_app/models/expense_model.dart';
-import 'package:expense_app/models/user_model.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
+
+import '../models/expense_model.dart';
+import '../models/user_model.dart';
 
 class DBhelper{
   ///singleton Instance..
@@ -62,6 +63,18 @@ class DBhelper{
     int rowEffected = await mDB.insert(TABLE_EXPENSE, addExpense.toMap());
     return rowEffected>0;
   }
+
+  Future<bool> updateExpense(ExpenseModel updateExp,int eid)async{
+    var mDB= await getDB();
+   int rowEffected=await mDB.update(TABLE_USER, updateExp.toMap(), where: "$COLUMN_EXPENSE_ID=?",whereArgs: ['$eid']);
+   return rowEffected>0;
+  }
+  Future<bool> deleteExpense(int eid)async{
+    var mDB = await getDB();
+   int rowEffected= await mDB.delete(TABLE_EXPENSE,where: "$COLUMN_EXPENSE_ID=?",whereArgs: ['$eid']);
+   return rowEffected>0;
+  }
+
   Future<List<ExpenseModel>> fetchExpense()async{
     var mDB =await getDB();
     var uid = await getUUID();

@@ -1,5 +1,7 @@
+import 'package:expense_app/ui_pages/add_exp_page.dart';
 import 'package:expense_app/ui_pages/bottomnav_page.dart';
 import 'package:expense_app/ui_pages/login_page.dart';
+import 'package:expense_app/ui_pages/splash_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
