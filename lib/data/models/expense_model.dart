@@ -2,12 +2,12 @@ import 'package:expense_app/data/local_data/dbhelper.dart';
 
 class ExpenseModel{
   int? eid;
-  int uid;
+  int? uid;
   int cat_id;
   String etitle,edesc,etype,crated_at;
   num eamt,ebal;
 
-  ExpenseModel({this.eid,required this.uid,required this.etitle,required this.edesc,required this.etype,required this.eamt,required this.ebal,required this.cat_id,required this.crated_at});
+  ExpenseModel({this.eid, this.uid,required this.etitle,required this.edesc,required this.etype,required this.eamt,required this.ebal,required this.cat_id,required this.crated_at});
 
   ///Map-->Model
   factory ExpenseModel.fromMap(Map<String,dynamic> map){

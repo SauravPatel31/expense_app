@@ -10,20 +10,9 @@ class AppConstData{
     CategoryModel(catid: 5, catName: "Shopping", catImgPath: "https://cdn-icons-png.flaticon.com/128/2331/2331970.png"),
     CategoryModel(catid: 6, catName: "Travels", catImgPath: "https://cdn-icons-png.flaticon.com/128/2200/2200326.png"),
   ];
- static Set<String> months={
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-  };
+ static Set<String> filteredExp={
+    'Day', 'Month', 'Year','Category'
+ };
 
   List<Map<String,dynamic>> expenseData =[
     {
