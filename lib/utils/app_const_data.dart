@@ -1,7 +1,11 @@
 import 'package:expense_app/data/models/category_model.dart';
+import 'package:intl/intl.dart';
+
+import '../data/models/expense_model.dart';
+import '../data/models/filtered_expense_model.dart';
 
 class AppConstData{
-
+  static num amount=0.0;
   static List<CategoryModel> mCategory=[
     CategoryModel(catid: 1, catName: "Coffee", catImgPath: "https://cdn-icons-png.flaticon.com/128/3354/3354187.png"),
     CategoryModel(catid: 2, catName: "Fast Food", catImgPath: "https://cdn-icons-png.flaticon.com/128/737/737967.png"),
@@ -14,40 +18,41 @@ class AppConstData{
     'Day', 'Month', 'Year','Category'
  };
 
-  List<Map<String,dynamic>> expenseData =[
-    {
-      'day':'Tuesday,14',
-      'shopingList':{
-        "myshoping":{
-          'cate':'Shop',
-          'shop':'-90',
-          'subtitle':'buy new clothes',
+///Date Formte
+  static DateFormat mFormat= DateFormat.yMMMd();
 
-        },
-        "myE-items":{
-          'cate':'Electronics',
-          'shop':'-1290',
-          'subtitle':'buy new iphone16',
-        }
-      },
-      'total':'-1380'
-    },
-    {
-      'day':'Monday,13',
-      'shopingList':{
-        "mytrns":{
-          'cate':'Transportation',
-          'shop':'-90',
-          'subtitle':'train ticket',
-
-        },
-        "myfood":{
-          'cate':'Eat Food',
-          'shop':'-150',
-          'subtitle':'Eat Food',
-        }
-      },
-      'total':'-240'
+ ///Filtered Expense..
+  static List<FilteredExpenseModel> filterExpense(List<ExpenseModel> mExpense){
+    //allExpenseData.clear();
+    List<FilteredExpenseModel> allData=[];
+    ///day filtered..
+    List<String> uqiuesDate = [];
+    // DateFormat mFormat=DateFormat.yMMMd();
+    for(ExpenseModel eachExp in mExpense){
+      var eachDate = mFormat.format(DateTime.fromMillisecondsSinceEpoch(int.parse(eachExp.crated_at)));
+      if(!uqiuesDate.contains(eachDate)){
+        uqiuesDate.add(eachDate);
+      }
     }
-  ];
+    print(uqiuesDate);
+    for(String eachDate in uqiuesDate){
+      num amt=0.0;
+      List<ExpenseModel> eachDateExpense=[];
+      for(ExpenseModel eachExp in mExpense){
+        var dateFromExp = mFormat.format(DateTime.fromMillisecondsSinceEpoch(int.parse(eachExp.crated_at)));
+        if(eachDate==dateFromExp){
+          eachDateExpense.add(eachExp);
+          if(eachExp.etype=="Debit"){
+            amt-=eachExp.eamt;
+          }
+          else{
+            amt+=eachExp.eamt;
+          }
+        }
+      }
+      allData.add(FilteredExpenseModel(title: eachDate, totalAmt: amt, allExp: eachDateExpense));
+      //allExpenseData.add(FilteredExpenseModel(title: eachDate, totalAmt: amt, allExp: eachDateExpense));
+    }
+    return allData;
+  }
 }
