@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 
 import '../data/models/category_model.dart';
 import '../data/models/expense_model.dart';
@@ -21,6 +22,7 @@ class StatiSticPage extends StatefulWidget {
 
 class _StatiSticPageState extends State<StatiSticPage> {
   List<FilteredExpenseModel> allExpenseData=[];
+
   List<Color> piColors=[
      Colors.pink,
     Colors.deepPurple,
@@ -30,11 +32,17 @@ class _StatiSticPageState extends State<StatiSticPage> {
     Colors.teal,
     Colors.indigo,
     Colors.brown,
-    Colors.red
+    Colors.red,
+    Color(0xff283593),
+    Color(0xff00695B),
+    Color(0xff0277BD),
+    Color(0xffFF8E01),
+    Color(0xffF85181),
+    Color(0xff01828F),
 
   ];
   DateFormat mFormat = DateFormat.yMMMd();
-
+  int i=0;
   String selectedMenuItem = "Day";
   int touchedIndex=0;
   bool isDark = false;
@@ -66,7 +74,7 @@ class _StatiSticPageState extends State<StatiSticPage> {
               //dropdownColor: Color(0xffEEF1FC),
               isExpanded: true,
               underline: Container(),
-              items: AppConstData.filteredExp.map((e) {
+              items: AppConstData.sfilteredExp.map((e) {
                 return DropdownMenuItem(
                   child: Text(e),
                   value: e,
@@ -75,16 +83,19 @@ class _StatiSticPageState extends State<StatiSticPage> {
               onChanged: (value) {
                 selectedMenuItem = value!;
                 setState(() {
-                  if (value == AppConstData.filteredExp.toList()[0]) {
-                    AppConstData.mFormat = DateFormat.yMMMd();
-                    // mFormat =DateFormat.yMMMd();
+                  if (value == AppConstData.sfilteredExp.toList()[0]) {
+                    AppConstData.mFormat =DateFormat.yMMMd();
                   }
-                  if (value == AppConstData.filteredExp.toList()[1]) {
+                  if (value == AppConstData.sfilteredExp.toList()[1]) {
                     AppConstData.mFormat = DateFormat.yMMM();
                   }
-                  if (value == AppConstData.filteredExp.toList()[2]) {
+                  if (value == AppConstData.sfilteredExp.toList()[2]) {
                     AppConstData.mFormat = DateFormat.y();
                   }
+                  if(value==AppConstData.sfilteredExp.toList()[3]){
+                    AppConstData.mFormat = DateFormat.EEEE();
+                  }
+
 
                 });
               },
@@ -96,36 +107,15 @@ class _StatiSticPageState extends State<StatiSticPage> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
                 height: 10,
               ),
               ///Expense Title Text and  Week DropdownMenu ..
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Expense Breakdown",
-                          style: myFonts18(myFontWeight: FontWeight.w600),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          "Limit \$900 / week",
-                          style: myFonts11(
-                              myColor: Colors.grey,
-                              myFontWeight: FontWeight.w800),
-                        )
-                      ],
-                    ),
-
-                  ],
-                ),
+              Text(
+                "Expense Breakdown",
+                style: myFonts18(myFontWeight: FontWeight.w600),
               ),
               SizedBox(
                 height: 10,
@@ -163,7 +153,7 @@ class _StatiSticPageState extends State<StatiSticPage> {
                         ));
                       } else {
                         return Center(
-                          child: Text("No Expense yet!!"),
+                          child: Lottie.asset("assets/lottie/barchart.json"),
                         );
                       }
                     }
@@ -190,8 +180,7 @@ class _StatiSticPageState extends State<StatiSticPage> {
                         SizedBox(
                           height: 5,
                         ),
-                        Text(
-                          "Your expenses are divided into 6 categories",
+                        Text("${"Your expenses are divided into $i categories"}",
                           style: myFonts11(
                               myColor: Colors.grey,
                               myFontWeight: FontWeight.w600),
@@ -215,38 +204,58 @@ class _StatiSticPageState extends State<StatiSticPage> {
                   }
                   if (state is LoadedState) {
                     var allData = AppConstData.filterExpense(state.mExp);
+
                     if (state.mExp.isNotEmpty) {
                       List<PieChartSectionData> piData = [];
-                      for (int i = 0; i < allData.length; i++) {
+                      for (i = 0; i < allData.length; i++) {
                         piData.add(PieChartSectionData(
-                          value: allData[i].allExp[0].eamt.toDouble(),
-                          title: allData[i].title,
-                          showTitle:true ,
+                          title:allData[i].title,
+                          radius:touchedIndex==i? 90:80 ,
+                          color:piColors[i],
+                          badgeWidget:touchedIndex==i?CircleAvatar(
+                              radius: 30,
+                              child: Text(allData[i].totalAmt.toString())):null ,
+                          badgePositionPercentageOffset: 1.1,
+                          titlePositionPercentageOffset: 0.3,
 
-                          radius:70 ,
-                          color:Colors.primaries[Random().nextInt(Colors.primaries.length-1)],
                         ));
                       }
-
-                      return SizedBox(
+                      return Container(
                         width: 300,
                         height: 300,
+                        margin: EdgeInsets.symmetric(horizontal: 50),
                         child: PieChart(
+
                           PieChartData(
                             sections: piData,
                             sectionsSpace: 2,
                             titleSunbeamLayout: true,
-                          )
+                              pieTouchData: PieTouchData(
+                                touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                                  if(pieTouchResponse!=null&&pieTouchResponse.touchedSection!=null){
+                                    setState(() {
+                                      touchedIndex=pieTouchResponse.touchedSection!.touchedSectionIndex;
+                                    });
+                                  }
+
+                                },
+                              ),
+                          ),
+                          swapAnimationDuration: Duration(milliseconds: 800),
+                          swapAnimationCurve: Curves.linearToEaseOut,
                         ),
                       );
-                    }else{
-                      return Text("No Data yet!!");
+                    }
+                    else{
+                      return Center(child: Lottie.asset("assets/lottie/piechart.json",width: 300));
                     }
 
                   }
                   return Container();
                 },
-              )
+              ),
+
+
             ],
           ),
         ),

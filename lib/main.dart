@@ -22,7 +22,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<ThemeProvider>().prefGetValue();
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Expense App',

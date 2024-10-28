@@ -4,12 +4,14 @@ import 'package:expense_app/data/models/filtered_expense_model.dart';
 import 'package:expense_app/ui_pages/bloc/expense_bloc.dart';
 import 'package:expense_app/ui_pages/bloc/expense_event.dart';
 import 'package:expense_app/ui_pages/bloc/expense_state.dart';
+import 'package:expense_app/ui_pages/bottom_nav_provider.dart';
 import 'package:expense_app/ui_pages/login_page.dart';
 import 'package:expense_app/utils/app_const_data.dart';
 import 'package:expense_app/utils/app_styling.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/models/category_model.dart';
@@ -145,6 +147,7 @@ class HomePageState extends State<StatefulWidget>{
                       setState(() {
                         if(value==AppConstData.filteredExp.toList()[0]){
                           AppConstData.mFormat=DateFormat.yMMMd();
+                         // AppConstData.mFormat=DateFormat.E();
                          // mFormat =DateFormat.yMMMd();
                         }
                         if(value==AppConstData.filteredExp.toList()[1]){
@@ -225,6 +228,7 @@ class HomePageState extends State<StatefulWidget>{
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(height: 10,),
         ///Expense List...
         Text("Expense List",style: myFonts18(myFontWeight: FontWeight.w800),),
         Expanded(
@@ -310,7 +314,15 @@ class HomePageState extends State<StatefulWidget>{
                 );
               }
               else{
-                return Center(child: Text("No Expenes yet!!"),);
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(child: Lottie.asset("assets/lottie/noexp.json",width: 250)),
+                    TextButton(onPressed: (){
+                      context.read<BottomNavProvider>().updateBottomPage(2);
+                    }, child: Text("Add Your Expense Now !!",style: myFonts16(),))
+                  ],
+                );
               }
 
             }

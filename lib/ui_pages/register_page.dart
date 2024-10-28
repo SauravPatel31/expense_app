@@ -65,7 +65,7 @@ class _RegisterPageState extends State<RegisterPage> {
               myTextFields(hinttxt: "Enter the email",controller: emailController,mIcons: Icon(Icons.alternate_email),),
               ///mob Number..
               mySizebox(),
-              myTextFields(hinttxt: "Enter the mobil number",controller: mobController,mIcons: Icon(Icons.call),maxlenght: 10,),
+              myTextFields(hinttxt: "Enter the mobil number",controller: mobController,mIcons: Icon(Icons.call),maxlenght: 10,keyBoardType: TextInputType.phone,),
               ///password..
               mySizebox(),
               myTextFields(hinttxt: "Enter the password",controller: passController,maxlenght: 8,mIcons: Icon(Icons.lock),),
@@ -77,7 +77,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   if(isAdd){
                     SharedPreferences pref =await SharedPreferences.getInstance();
                     pref.setString("uName", nameController.text.toString());
-                    // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage(),));
+                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage(),));
                     Navigator.pop(context);
                   }
                   else{

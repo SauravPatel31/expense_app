@@ -15,7 +15,10 @@ class AppConstData{
     CategoryModel(catid: 6, catName: "Travels", catImgPath: "https://cdn-icons-png.flaticon.com/128/2200/2200326.png"),
   ];
  static Set<String> filteredExp={
-    'Day', 'Month', 'Year','Category'
+    'Day', 'Month', 'Year','Category',
+ };
+ static Set<String> sfilteredExp={
+    'Day', 'Month', 'Year','WeekDay','Category',
  };
 
 ///Date Formte

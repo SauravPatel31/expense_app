@@ -24,9 +24,9 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             Text("Welcome Back",style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
             SizedBox(height: 10,),
-            myTextFields(hinttxt: "Enter the mail",controller: emailController,),
+            myTextFields(hinttxt: "Enter the mail",controller: emailController,mIcons: Icon(Icons.mail),keyBoardType: TextInputType.emailAddress,),
             SizedBox(height: 10,),
-            myTextFields(hinttxt: "Enter the password",controller: passController,),
+            myTextFields(hinttxt: "Enter the password",controller: passController,mIcons: Icon(Icons.lock),),
             SizedBox(height: 20,),
             RoundedBatton(btnName: "Login", callback:()async{
               if(emailController.text.isNotEmpty&&passController.text.isNotEmpty){
