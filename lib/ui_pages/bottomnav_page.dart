@@ -16,8 +16,6 @@ class BottomNavPage extends StatefulWidget{
 }
 
 class BottomNavPageState extends State<StatefulWidget>{
-
-
   List<Widget> navTo=[
     HomePage(),
     StatiSticPage(),
